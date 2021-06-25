@@ -99,6 +99,22 @@
     <servlet-name>LogServlet</servlet-name>
     <url-pattern>/log</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>weixin</servlet-name>
+    <servlet-class>com.mxgraph.online.LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>weixin</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>wx</servlet-name>
+    <servlet-class>com.mxgraph.online.WxServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>wx</servlet-name>
+    <url-pattern>/weixin</url-pattern>
+  </servlet-mapping>
     <servlet>
     <description/>
     <display-name>MSGraphAuthServlet</display-name>
@@ -163,6 +179,7 @@
     <servlet-name>DropboxAuthServlet</servlet-name>
     <url-pattern>/dropbox</url-pattern>
   </servlet-mapping>
+
   <mime-mapping>
     <extension>css</extension>
     <mime-type>text/css</mime-type>
