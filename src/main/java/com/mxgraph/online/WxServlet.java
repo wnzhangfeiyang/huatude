@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mxgraph.dao.UserInfoDao;
 import com.mxgraph.entity.UserInfo;
 import com.mxgraph.enums.StatusEnum;
+import com.mxgraph.response.R;
 import com.mxgraph.util.H2JdbcCreateUtil;
 import com.mxgraph.util.WxAuthUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -25,6 +27,9 @@ public class WxServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setCharacterEncoding("utf-8");
+        resp.setContentType("application/json; charset=utf-8");
+        PrintWriter writer = resp.getWriter();
         String code = req.getParameter("code");
         if(StringUtils.isBlank(code)){
             throw new ServletException("invaild code ......");
@@ -56,6 +61,7 @@ public class WxServlet extends HttpServlet {
                 UserInfo userInfo = userInfoDao.findUserInfoByUnionId(unionid);
                 if(Objects.nonNull(userInfo)){
                     //此处开始更新userInfo信息，并且返回对象
+                    writer.println(R.data(userInfo));
                 } else {
                     log.info("start add userInfo");
                     long now = System.currentTimeMillis();
@@ -65,6 +71,9 @@ public class WxServlet extends HttpServlet {
                         log.info("the user is add success, userId:{}, openId:{}, unionId:{}", uuid, openId, unionid);
                     }
                     //添加完成后返回对象
+                    UserInfo newUserInfo = userInfoDao.findUserInfoByUnionId(unionid);
+                    //组装成json数据，通过R.data来组装
+                    writer.println(R.data(newUserInfo));
                 }
             }
         }
@@ -77,9 +86,9 @@ public class WxServlet extends HttpServlet {
     }
 
     public static void main(String[] args) {
-        UUID id=UUID.randomUUID();
-        String[] idd=id.toString().split("-");
-        System.out.println(idd[0]+idd[1]+idd[2]);
+        R<Boolean> data = R.data(Boolean.TRUE);
+        System.out.println(data);
     }
+
 
 }
